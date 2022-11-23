@@ -1,0 +1,383 @@
+<h2>
+    Разовая рассылка:
+</h2>
+<input id="subject" type="text" placeholder="Тема письма"><br>
+<textarea id = 'textMail' placeholder="Текст письма"></textarea>
+<div id = 'viewMessege'></div>
+<input id="sendMail" type="button" value="Отправить">
+<h2>
+    Шаблоны рассылок:
+</h2>
+<p>Шаблон должен содержать в себе nhb html элемента: "&lt;div id="helloStudent"&gt;&lt;/div&gt;", "&lt;div id="text"&gt;&lt;/div&gt;", "&lt;a id="canselMail"&gt; &lt;/a&gt;. Скопируйте их с сайта и вставбте в шаблон.</p>
+<input id="fileShablon" type="file" onchange="loadNewShablon(this)"><br>
+<input id = 'loadShablon' type ='button' value ='Загрузить'><br>
+<div id = 'shablonView'></div><br>
+<h2>
+    Праздничные рассылки:
+</h2>
+<a>Шаблон рассылки для праздничных дней должен соджержать в себе эелемент "&lt;div id="helloStudent"&gt;&lt;/div&gt;". Скопируйте их с сайта и вставте в шаблон</a><br>
+<a>Шаблон рассылки на день рождения:</a><br>
+<input id="fileShablonBirth" type="file" onchange="loadBirthShablon(this)"><br>
+<input id = 'loadShablonBirth' type ='button' value ='Загрузить'><br>
+<div id = 'shablonBirthView'></div><br>
+<a>Шаблон рассылки на Новый Год:</a><br>
+<input id="fileShablonNewYear" type="file" onchange="loadNewYearShablon(this)"><br>
+<input id = 'loadShablonNewYear' type ='button' value ='Загрузить'><br>
+<div id = 'shablonNewYearView'></div><br>
+<a>Шаблон рассылки на 23 Февраля:</a><br>
+<input id="fileShablonFeb" type="file" onchange="loadFebShablon(this)"><br>
+<input id = 'loadShablonFeb' type ='button' value ='Загрузить'><br>
+<div id = 'shablonFebView'></div><br>
+<a>Шаблон рассылки на 8 Марта:</a><br>
+<input id="fileShablonMart" type="file" onchange="loadMartShablon(this)"><br>
+<input id = 'loadShablonMart' type ='button' value ='Загрузить'><br>
+<div id = 'shablonMartView'></div><br>
+<a>Шаблон рассылки на 1 Мая:</a><br>
+<input id="fileShablonFirstMay" type="file" onchange="loadFirstMayShablon(this)"><br>
+<input id = 'loadShablonFirstMay' type ='button' value ='Загрузить'><br>
+<div id = 'shablonFirstMayView'></div><br>
+<a>Шаблон рассылки на 9 мая:</a><br>
+<input id="fileShablonMay" type="file" onchange="loadMayShablon(this)"><br>
+<input id = 'loadShablonMay' type ='button' value ='Загрузить'><br>
+<div id = 'shablonMayView'></div><br>
+<a>Шаблон рассылки на 12 Июня:</a><br>
+<input id="fileShablonJune" type="file" onchange="loadJuneShablon(this)"><br>
+<input id = 'loadShablonJune' type ='button' value ='Загрузить'><br>
+<div id = 'shablonJuneView'></div><br>
+<a>Шаблон рассылки на 4 Ноября:</a><br>
+<input id="fileShablonNov" type="file" onchange="loadNovShablon(this)"><br>
+<input id = 'loadShablonNov' type ='button' value ='Загрузить'><br>
+<div id = 'shablonNovView'></div><br>
+<script>
+    $('#main').ready(function () {
+        $.ajax({url: "config/shablon.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                shablon = shablon.replace('<div id="text"></div>','<div id="text">Ваш текст</div>')
+                $('#shablonView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/feb.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonFebView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/firstMay.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonFirstMayView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/june.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonJuneView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/birthDay.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonBirthView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/mart.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonMartView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/newYear.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonNewYearView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/nMay.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonMayView').html(shablon);
+            }
+        });
+        $.ajax({url: "config/holydaysShablons/november.html",
+            dataType: "html",
+            success: function(response) {
+                let shablon = response.replace('<div id="helloStudent"></div>','<div id="helloStudent">Уважаемый Имя Отчество!</div>');
+                $('#shablonNovView').html(shablon);
+            }
+        });
+        $('#sendMail').click(function () {
+            var data = new FormData();
+
+            data.append('subject', $('#subject').val());
+            data.append('text', $('#textMail').val());
+            $.ajax({url: "controllers/sendMail.php",
+                type: 'POST',
+                data: data,
+                dataType: 'html',
+                processData: false, // Не обрабатываем файлы (Don't process the files)
+                contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+
+            });
+        });
+    });
+
+    function loadNewShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function() {
+            $('#shablonView').html(reader.result);
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablon').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=shablon",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadBirthShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonBirthView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonBirth').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=birth",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadNewYearShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonNewYearView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonNewYear').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=newyear",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadFebShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonFebView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonFeb').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=feb",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadMartShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonMartView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonMart').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=mart",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadFirstMayShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonFirstMayView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonFirstMay').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=firstmay",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadMayShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonMayView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonMay').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=may",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadJuneShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonJuneView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonJune').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=june",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+    function loadNovShablon(input){
+        let file = input.files[0];
+        let reader = new FileReader();
+        $('#shablonNovView').html(reader.result);
+        reader.readAsText(file);
+        reader.onload = function() {
+            let newInf = reader.result;
+            console.log(reader.result);
+            $('#loadShablonNov').click(function () {
+                var data = new FormData();
+                data.append('shablon', newInf.toString())
+                $.ajax({url: "controllers/saveShablon.php?function=nov",
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function(response) {
+                        loadMailPage();
+                    }
+                });
+            });
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+    }
+</script>

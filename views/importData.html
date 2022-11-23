@@ -1,0 +1,153 @@
+
+<input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="input"/>
+<h2>Проверьте правильность данных импорта. При не соотвествии формату запись будет пропущенна</h2>
+<p>Выберете, какой столбец соотвествует какому полю в Базе Данных. Учтите, что данные не должны содержать пробелов. В ином случае запись со слушателем будет пропущена</p>
+<p>Формат пола: м/ж. Формат даты: ДД.ММ.ГГГГ</p>
+<input id="saveStudent" type="button" value = 'Записать слушателей'>
+<table id="resultTable">
+    <caption>Импорт данных</caption>
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+</table>
+<div id='result'></div>
+<script>
+    try {
+        var input = document.getElementById('input');
+        var listOfSelect = [];
+        let mapOfExel1 = [];
+    }
+    catch (e) {
+        console.log('Переинициализация данных');
+        input = document.getElementById('input');
+        listOfSelect = [];
+        mapOfExel1 = [];
+    }
+
+    input.addEventListener('change', function () {
+        readXlsxFile(input.files[0], {dateFormat: 'MM/DD/YY'}).then(function (data) {
+            //document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+            // let mapOfExel = JSON.stringify(data, null, 2);
+            let mapOfExel = data;
+            mapOfExel1 = mapOfExel;
+            console.log(mapOfExel[0]);
+            if (mapOfExel[0].length < 6) alert('В файле недостаточно столбцов (Минимум 6, в файле : ' + mapOfExel[0].length + ')');
+            else {
+                for (let n = 0; n < mapOfExel[0].length; n++) {
+                    var head = document.createElement('th');
+                    var select = document.createElement('select');
+                    var noneOption = document.createElement('option');
+                    noneOption.setAttribute("value", "Пустой");
+                    noneOption.append('Пустой');
+                    var firstOption = document.createElement('option');
+                    firstOption.setAttribute("value", "Имя");
+                    firstOption.append('Имя');
+                    var twoOption = document.createElement('option');
+                    twoOption.setAttribute("value", "Фамилия");
+                    twoOption.append('Фамилия');
+                    var treOption = document.createElement('option');
+                    treOption.setAttribute("value", "Отчество");
+                    treOption.append('Отчество');
+                    var forOption = document.createElement('option');
+                    forOption.setAttribute("value", "Почта");
+                    forOption.append('Почта');
+                    var fiveOption = document.createElement('option');
+                    fiveOption.setAttribute("value", "Пол");
+                    fiveOption.append('Пол');
+                    var sixOption = document.createElement('option');
+                    sixOption.setAttribute("value", "Дата рождения");
+                    sixOption.append('Дата рождения');
+                    select.append(noneOption);
+                    select.append(firstOption);
+                    select.append(twoOption);
+                    select.append(treOption);
+                    select.append(forOption);
+                    select.append(fiveOption);
+                    select.append(sixOption);
+                    head.append(select);
+                    listOfSelect.push(select);
+                    console.log(listOfSelect[0]);
+                    document.getElementById('resultTable').append(head);
+                }
+                for (let i = 0; i < mapOfExel.length; i++) {
+                    var row = document.createElement('tr');
+                    for (let n = 0; n < mapOfExel[i].length; n++) {
+                        var column = document.createElement('td');
+                        column.append(mapOfExel[i][n]);
+                        row.append(column);
+                    }
+                    document.getElementById('resultTable').append(row);
+                }
+            }
+        }, function (error) {
+            console.error(error)
+            alert("Error while parsing Excel file. See console output for the error stack trace.")
+        });
+        $('#saveStudent').click(saveStudents);
+    })
+
+    function saveStudents() {
+        console.log('start save');
+        for(let i=0;i< mapOfExel1.length; i++){
+            let data;
+            console.log('save '+ mapOfExel1[i]);
+            let student = new Student(mapOfExel1[i]);
+            let chek = 0;
+            for (let n=0; n< mapOfExel1[i].length;n++){
+               switch ($(listOfSelect[n]).val()){
+                   case 'Имя':{
+                       chek++;
+                       student.name = mapOfExel1[i][n];
+                       break;
+                   }
+                   case 'Фамилия':{
+                       chek++;
+                       student.lastName = mapOfExel1[i][n];
+                       break;
+                   }
+                   case 'Отчество':{
+                       chek++;
+                       student.patronymic = mapOfExel1[i][n];
+                       break;
+                   }
+                   case 'Почта':{
+                       chek++;
+                       student.mail = mapOfExel1[i][n];
+                       break;
+                   }
+                   case 'Пол':{
+                       chek++;
+                       student.gender = mapOfExel1[i][n];
+                       break;
+                   }
+                   case 'Дата рождения':{
+                       chek++;
+                       student.birthday = mapOfExel1[i][n];
+                       try{
+                       let day = student.birthday.substr(0,2);
+                       let month = student.birthday.substr(3,2);
+                       let year = student.birthday.substr(6,4);
+                       student.birthday = year + '.' +  month + '.' + day;
+                       }
+                       catch (e) {
+                           console.log('пустая дата');
+                       }
+                       break;
+                   }
+               }
+            }
+            if(chek ==6){
+                student.saveStudent();
+            }
+            else{
+                console.log('Ошибка столбцов');
+            }
+        }
+        alert('Запись проведена успешно');
+    }
+</script>

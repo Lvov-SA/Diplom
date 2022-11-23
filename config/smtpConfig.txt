@@ -1,0 +1,4 @@
+smtp.gmail.com
+587
+rprobnyj@gmail.com
+1818Ererer

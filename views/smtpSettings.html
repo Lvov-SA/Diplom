@@ -1,0 +1,46 @@
+<h2>Настройки SMTP</h2>
+<input id = 'host' placeholder="host (ssl/hostname)"><br>
+<input id = 'port' placeholder="port"><br>
+<input id = 'mail' placeholder="mail"><br>
+<input id = 'password' placeholder="password"><br>
+<input id = 'saveSettings' type="button" value = 'Сохранить изменения'>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: 'controllers/smtpSetting.php?function=readSettings',
+            type: 'POST',
+            success: function (result, textStatus, jqXHR) {
+                console.log(result);
+                let response = JSON.parse(result);
+                $('#host').val(response.host[0]);
+                $('#port').val(response.port[0]);
+                $('#mail').val(response.mail[0]);
+                $('#password').val(response.password[0]);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('ОШИБКИ AJAX запроса: ' + textStatus);
+            }
+        });
+        $('#saveSettings').click(function () {
+            var data = new FormData();
+            data.append('host', $('#host').val());
+            data.append('port', $('#port').val());
+            data.append('mail', $('#mail').val());
+            data.append('password', $('#password').val());
+            $.ajax({
+                url: 'controllers/smtpSetting.php?function=writeSettings',
+                type: 'POST',
+                data: data,
+                cache: false,
+                dataType: 'json',
+                processData: false, // Не обрабатываем файлы (Don't process the files)
+                contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                success: function (result, textStatus, jqXHR) {
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('ОШИБКИ AJAX запроса: ' + textStatus);
+                }
+            });
+        });
+    });
+</script>

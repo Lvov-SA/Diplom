@@ -1,0 +1,120 @@
+
+
+<h2>Добавить слушателя:</h2>
+<input id = 'name' type ='text' placeholder="Имя">
+<input id ='patronymic' type ='text' placeholder="Отчество">
+<input id = 'lastName' type ='text' placeholder="Фамилия">
+<input id = 'mail' type ='text' placeholder="Почта">
+<input id = 'birthday' type ='date'>День рождения
+<input id = 'genderM' name = 'gender' type ='radio' value="0">М
+<input id = 'genderW' name = 'gender' type ='radio' value="1">Ж
+<input type = 'button' id = 'addStudentButton' value="Добавить слушателя"><p></p>
+<h2>Просмотр слушателей:</h2>
+<input id="search" placeholder="Поиск">
+<table id ='studentTable' border="1px">
+    <caption>Слушатели ДПО</caption>
+    <tr>
+        <th>Номер</th>
+        <th>Почта</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Отчество</th>
+        <th>День рождения</th>
+        <th>Пол</th>
+        <th></th>
+    </tr>
+</table>
+<script>
+    function search() {
+        let collection = document.getElementsByClassName('table'); // получаем коллекцию строк с классом "table"
+        let str = $('#search').val(); // получаем значение поисковой строки
+        console.log(collection.length);
+        if (collection.length !=0) { // проверяем, есть ли значения в коллекции
+            for (i = 0; i <= collection.length; i++) { // перебираем все элементы коллекции
+                    let trElement = $($(collection.item(i)).parent()).parent();
+                    let mail = $(collection.item(i++)).val().toLowerCase();
+                    let name = $(collection.item(i++)).val().toLowerCase();
+                    let lastName = $(collection.item(i++)).val().toLowerCase();
+                    let patron = $(collection.item(i++)).val().toLowerCase();
+                    let birth = $(collection.item(i)).val();
+                    if(mail.indexOf(str.toLowerCase()) != -1 || name.indexOf(str.toLowerCase()) != -1 || lastName.indexOf(str.toLowerCase()) != -1 || patron.indexOf(str.toLowerCase()) != -1 || birth.indexOf(str) != -1 ) // проверяем наличие введенной нам под строки в строке таблицы
+                    {
+                        trElement.show();
+
+                    }
+                    else {
+                        trElement.hide();
+                    }
+                }
+            }
+    }
+    $('document').ready(function () {
+        $('#search').keyup(function () {
+            search();
+        });
+        $.ajax({
+        url: 'controllers/student.php?function=getStudents',
+        type: 'GET',
+        cache: false,
+        dataType: 'json',
+        processData: false, // Не обрабатываем файлы (Don't process the files)
+        contentType: false, // Так jQuery скажет серверу что это строковой запрос
+        success: function (response, textStatus, jqXHR) {
+            var result = response;
+            console.log(result);
+            for(var n in result){
+                let student = new Student(result[n]);
+                $('#studentTable').append(student.getRow());
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('ОШИБКИ AJAX запроса: ' + textStatus);
+        }
+    });
+        $('#addStudentButton').click(function () {
+            if($('#name').val() != null && $('#patronymic').val() != null  && $('#lastName').val() != null  && $('#mail').val().indexOf("@") > -1 && ($('#genderM').prop("checked") || $('#genderW').prop("checked"))){
+                var data = new FormData();
+                data.append('mail', $('#mail').val());
+                data.append('name', $('#name').val());
+                data.append('lastName', $('#lastName').val());
+                data.append('patronymic', $('#patronymic').val());
+                data.append('birthday', $('#birthday').val());
+                if ($('#genderM').prop("checked")) data.append('gender', '0');
+                else data.append('gender', '1');
+                $.ajax({
+                    url: 'controllers/student.php?function=addStudents',
+                    type: 'POST',
+                    data: data,
+                    cache: false,
+                    dataType: 'json',
+                    processData: false, // Не обрабатываем файлы (Don't process the files)
+                    contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                    success: function (result, textStatus, jqXHR) {
+                        $.ajax({url: "views/students.html",
+                            dataType: "html",
+                            success: function(response) {
+                                $('#mainBody').html(response);
+                            }
+                        });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $.ajax({url: "views/students.html",
+                            dataType: "html",
+                            success: function(response) {
+                                $('#mainBody').html(response);
+                            }
+                        });
+                        console.log('ОШИБКИ AJAX запроса: ' + textStatus);
+                    }
+                });
+            }
+            else{
+                alert('Проверьте правильность заполнения форм');
+            }
+        });
+    });
+
+</script>
+
+
